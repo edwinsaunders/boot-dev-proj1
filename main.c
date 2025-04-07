@@ -27,17 +27,16 @@ typedef struct GameState {
 void update(gamestate_t *obj) {
 	int ch = getch(); //get input
 
-	if (ch == 'a') {
+	switch (ch) {
+	case 'w':
 		obj->lpadpos++;
-	}
-	else if (ch == 'b') {
+		break;
+	case 's':
 		obj->lpadpos--;
+		break;
+	default:
+		return;
 	}
-	// if (ch == ERR) {
-    // 	return;
-	// }
-	//obj->lpadpos = 97;
-	//addch(obj->lpadpos);
 }
 
 
@@ -48,20 +47,22 @@ int main(int argc, char **argv) {
 	initscr(); // Initialize ncurses
 	cbreak();
 	nodelay(stdscr, TRUE);
+	noecho();
 
 	gamestate_t thisgame = {.lpadpos = 0, .rpadpos = 0, .ballpos = 0, .game = 1};
 
 	int timer = 10;
 	int newX = 0;
 	int newY = 0;
+	char player = 'o';
 	
 	while(timer) {
 		
-
+		addch(player);
 		//thisgame.lpadpos = 65;
 		
 		// addch(thisgame.lpadpos);
-		move(newX, newY);
+		// move(newX, newY);
 		// addch('o');
 		// refresh();
 		
@@ -71,10 +72,19 @@ int main(int argc, char **argv) {
 
 		// printw("%d\n", LINES);
 		// printw("%d", COLS);
-
+		int prev = thisgame.lpadpos;
 		update(&thisgame);
+		if (thisgame.lpadpos > prev) {
+			move(0, thisgame.lpadpos - 1);
+		}
+		//} else if (thisgame.lpadpos < prev) {
+			//move(0, thisgame.lpadpos + 1);
+		//}
 		
-		addch(thisgame.lpadpos);
+		addch(' ');
+		
+		move(0, thisgame.lpadpos);
+		addch(player);
 		// refresh();
 		// usleep(500000);
 
