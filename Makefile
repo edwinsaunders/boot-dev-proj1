@@ -1,4 +1,10 @@
 all: main
 
-main: main.c
-	gcc main.c -o main -lncurses
+main.o: main.c
+	gcc -c main.c -o main.o
+
+main: main.o
+	gcc -o main main.o -lncurses -lm
+
+clean:
+	rm -f main.o main
